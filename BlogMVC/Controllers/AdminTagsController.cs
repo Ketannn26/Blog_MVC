@@ -8,9 +8,9 @@ namespace BlogMVC.Controllers
     public class AdminTagsController : Controller
     {
         private BlogDbContext blogdbContext;
-        public AdminTagsController(BlogDbContext blogDbContext) 
+        public AdminTagsController(BlogDbContext blogDbContext)
         {
-          this.blogdbContext = blogDbContext;
+            this.blogdbContext = blogDbContext;
         }
         [HttpGet]
         public IActionResult Add()
@@ -39,6 +39,41 @@ namespace BlogMVC.Controllers
         {
             var tags = blogdbContext.Tags.ToList();
             return View(tags);
+        }
+         [HttpGet]
+           public IActionResult Edit(Guid id)
+           {
+               var tag = blogdbContext.Tags.Find(id);
+               if (tag == null)
+               {
+                   var etr = new EditTagRequest
+                   {
+                       id = tag.Id,
+                       Name = tag.Name,
+                       DisplayName = tag.DisplayName,
+                   };
+                   return View(etr);
+               }
+               return View(null);
+           }
+        [HttpPost]
+        public IActionResult Edit(EditTagRequest etr)
+        {
+            var tag = new Tag
+            {
+                Id = etr.id,
+                Name = etr.Name,
+                DisplayName = etr.DisplayName
+            };
+            var oldTag = blogdbContext.Tags.Find(tag.Id);
+            if (oldTag != null)
+            {
+                oldTag.Name = etr.Name;
+                oldTag.DisplayName = etr.DisplayName;
+                blogdbContext.SaveChanges();
+                return RedirectToAction("List");
+            }
+            return RedirectToAction(null);
         }
     }
 }
