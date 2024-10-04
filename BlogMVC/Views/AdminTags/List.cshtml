@@ -1,0 +1,35 @@
+﻿@model List<BlogMVC.Models.Domain.Tag>
+
+<div class="container py-5">
+    @if (Model != null && Model.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th> Id </th>
+                    <th> Name </th>
+                    <th> Display Name </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var i in Model)
+                {
+                    <tr>
+                        <td>@i.Id </td>
+                        <td>@i.Name</td>
+                        <td>@i.DisplayName</td>
+                        <td>
+                            <a asp-area="" asp-controller="AdminTags" asp-action="Edit">Edit</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>
+            Tags empty!
+        </p>
+    }
+</div>
